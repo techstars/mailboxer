@@ -1,37 +1,55 @@
-class Mailboxer::Conversation < ActiveRecord::Base
-  self.table_name = :mailboxer_conversations
+class Mailboxer::Conversation
+
+  include Mongoid::Document
+  include Mongoid::Timestamps
+
+  store_in collection: :mailboxer_conversations
+
+  field :subject, type: String,  :default => ""
 
   attr_accessible :subject if Mailboxer.protected_attributes?
 
   has_many :opt_outs, :dependent => :destroy, :class_name => "Mailboxer::Conversation::OptOut"
   has_many :messages, :dependent => :destroy, :class_name => "Mailboxer::Message"
-  has_many :receipts, :through => :messages,  :class_name => "Mailboxer::Receipt"
+  has_many :receipts, :class_name => "Mailboxer::Receipt"
 
   validates :subject, :presence => true,
                       :length => { :maximum => Mailboxer.subject_max_length }
 
   before_validation :clean
 
-  scope :participant, lambda {|participant|
-    where('mailboxer_notifications.type'=> Mailboxer::Message.name).
-    order("mailboxer_conversations.updated_at DESC").
-    joins(:receipts).merge(Mailboxer::Receipt.recipient(participant)).uniq
-  }
-  scope :inbox, lambda {|participant|
-    participant(participant).merge(Mailboxer::Receipt.inbox.not_trash.not_deleted)
-  }
-  scope :sentbox, lambda {|participant|
-    participant(participant).merge(Mailboxer::Receipt.sentbox.not_trash.not_deleted)
-  }
-  scope :trash, lambda {|participant|
-    participant(participant).merge(Mailboxer::Receipt.trash)
-  }
-  scope :unread,  lambda {|participant|
-    participant(participant).merge(Mailboxer::Receipt.is_unread)
-  }
-  scope :not_trash,  lambda {|participant|
-    participant(participant).merge(Mailboxer::Receipt.not_trash)
-  }
+  class << self
+    def participant(participant)
+      # Conversations with the participant
+      c_ids = Mailboxer::Receipt.recipient(participant).map{|r| r.conversation.id }.uniq
+      self.in(id: c_ids).desc(:updated_at)
+    end
+
+    def inbox(participant)
+      c_ids = Mailboxer::Receipt.recipient(participant).inbox.not_trash.not_deleted.map{|r| r.conversation.id }.uniq
+      self.in(id: c_ids)
+    end
+
+    def sentbox(participant)
+      c_ids = Mailboxer::Receipt.recipient(participant).sentbox.not_trash.not_deleted.map{|r| r.conversation.id }.uniq
+      self.in(id: c_ids)
+    end  
+
+    def trash(participant)
+      c_ids = Mailboxer::Receipt.recipient(participant).trash.map{|r| r.conversation.id }.uniq
+      self.in(id: c_ids)
+    end
+
+    def unread(participant)
+      c_ids = Mailboxer::Receipt.recipient(participant).is_unread.map{|r| r.conversation.id }.uniq
+      self.in(id: c_ids)
+    end
+
+    def not_trash(participant)
+      c_ids = Mailboxer::Receipt.recipient(participant).not_trash.map{|r| r.conversation.id }.uniq
+      self.in(id: c_ids)
+    end
+  end
 
   #Mark the conversation as read for one of the participants
   def mark_as_read(participant)
@@ -86,7 +104,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   #First message of the conversation.
   def original_message
-    @original_message ||= messages.order('created_at').first
+    @original_message ||= messages.asc(:created_at).first
   end
 
   #Sender of the last message.
@@ -96,7 +114,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
 
   #Last message in the conversation.
   def last_message
-    @last_message ||= messages.order('created_at DESC').first
+    @last_message ||= messages.desc(:created_at).first
   end
 
   #Returns the receipts of the conversation for one participants
@@ -115,17 +133,18 @@ class Mailboxer::Conversation < ActiveRecord::Base
     receipts_for(participant).any?
   end
 
-	#Adds a new participant to the conversation
-	def add_participant(participant)
-		messages.each do |message|
+  #Adds a new participant to the conversation
+  def add_participant(participant)
+    messages.each do |message|
       Mailboxer::ReceiptBuilder.new({
         :notification => message,
+        :conversation => self,
         :receiver     => participant,
         :updated_at   => message.updated_at,
         :created_at   => message.created_at
       }).build.save
-		end
-	end
+    end
+  end
 
   #Returns true if the participant has at least one trashed message of the conversation
   def is_trashed?(participant)
@@ -163,7 +182,7 @@ class Mailboxer::Conversation < ActiveRecord::Base
   end
 
   # Creates a opt out object
-  # because by default all particpants are opt in
+  # because by default all participants are opt in
   def opt_out(participant)
     return unless has_subscriber?(participant)
     opt_outs.create(:unsubscriber => participant)

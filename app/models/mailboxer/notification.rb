@@ -1,37 +1,56 @@
-class Mailboxer::Notification < ActiveRecord::Base
-  self.table_name = :mailboxer_notifications
+class Mailboxer::Notification
+
+  include Mongoid::Document
+  include Mongoid::Timestamps
+
+  store_in collection: :mailboxer_notifications
+
+  field :type,    type: String,   :default => ""
+  field :body,    type: String,   :default => ""
+  field :subject, type: String,   :default => ""
+  field :draft,   type: Boolean,  :default => false
+  field :global,  type: Boolean,  :default => false
 
   attr_accessor :recipients
   attr_accessible :body, :subject, :global, :expires if Mailboxer.protected_attributes?
 
   belongs_to :sender, :polymorphic => :true
   belongs_to :notified_object, :polymorphic => :true
-  has_many :receipts, :dependent => :destroy, :class_name => "Mailboxer::Receipt"
+  has_many   :receipts, :dependent => :destroy, :class_name => "Mailboxer::Receipt"
 
   validates :subject, :presence => true,
                       :length => { :maximum => Mailboxer.subject_max_length }
   validates :body,    :presence => true,
                       :length => { :maximum => Mailboxer.body_max_length }
 
-  scope :recipient, lambda { |recipient|
-    joins(:receipts).where('mailboxer_receipts.receiver_id' => recipient.id,'mailboxer_receipts.receiver_type' => recipient.class.base_class.to_s)
-  }
-  scope :with_object, lambda { |obj|
+  scope :with_object, ->(obj){
     where('notified_object_id' => obj.id,'notified_object_type' => obj.class.to_s)
   }
-  scope :not_trashed, lambda {
-    joins(:receipts).where('mailboxer_receipts.trashed' => false)
-  }
-  scope :unread,  lambda {
-    joins(:receipts).where('mailboxer_receipts.is_read' => false)
-  }
-  scope :global, lambda { where(:global => true) }
-  scope :expired, lambda { where("mailboxer_notifications.expires < ?", Time.now) }
+  # scope :not_trashed, where('mailboxer_receipts.trashed' => false)
+  # scope :unread, where('mailboxer_receipts.is_read' => false)
+  scope :global, where(:global => true)
+  scope :expired, lambda { lt(expires: Time.now) }
   scope :unexpired, lambda {
-    where("mailboxer_notifications.expires is NULL OR mailboxer_notifications.expires > ?", Time.now)
+    where(:expires => nil).or(:expires > Time.now)
   }
 
   class << self
+
+    def recipient(recipient)
+      n_ids = Mailboxer::Receipt.where(:receiver_id => recipient.id,:receiver_type => recipient.class.to_s).map{|r| r.notification.id }.uniq
+      self.in(id: n_ids)
+    end
+
+    def not_trashed
+      n_ids = Mailboxer::Receipt.where(:trashed => false).map{|r| r.notification.id }.uniq
+      self.in(id: n_ids)
+    end
+
+    def unread
+      n_ids = Mailboxer::Receipt(:is_read => false).map{|r| r.notification.id }.uniq
+      self.in(id: n_ids)
+    end
+
     #Sends a Notification to all the recipients
     def notify_all(recipients, subject, body, obj = nil, sanitize_text = true, notification_code=nil, send_mail=true)
       notification = Mailboxer::NotificationBuilder.new({
@@ -57,6 +76,10 @@ class Mailboxer::Notification < ActiveRecord::Base
         false
       end
     end
+  end
+
+  def recipient(recipient)
+    Mailboxer::Receipt.find_by(:receiver_id => recipient.id,:receiver_type => recipient.class.to_s).notification
   end
 
   def expired?
@@ -181,9 +204,10 @@ class Mailboxer::Notification < ActiveRecord::Base
   def build_receipt(receiver, mailbox_type, is_read = false)
     Mailboxer::ReceiptBuilder.new({
       :notification => self,
+      :conversation => self.conversation,
       :mailbox_type => mailbox_type,
       :receiver     => receiver,
-      :is_read      => is_read
+      :is_read      => is_read,
     }).build
   end
 

@@ -49,7 +49,7 @@ describe Mailboxer::Receipt do
     end
 
     it "should refer to the correct base class" do
-      expect(@mail2.receiver_type).to eq @entity3.class.base_class.to_s
+      expect(@mail2.receiver_type).to eq @entity3.class.to_s
     end
   end
 end

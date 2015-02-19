@@ -1,25 +1,33 @@
-class Mailboxer::Receipt < ActiveRecord::Base
-  self.table_name = :mailboxer_receipts
+class Mailboxer::Receipt
+
+  include Mongoid::Document
+  include Mongoid::Timestamps
+
+  store_in collection: :mailboxer_receipts
+
+  field :is_read,      type: Boolean,  :default => false
+  field :trashed,      type: Boolean,  :default => false
+  field :deleted,      type: Boolean,  :default => false
+  field :mailbox_type, type: String,   :default => ""
+
   attr_accessible :trashed, :is_read, :deleted if Mailboxer.protected_attributes?
 
   belongs_to :notification, :class_name => "Mailboxer::Notification", :validate => true, :autosave => true
   belongs_to :receiver, :polymorphic => :true
   belongs_to :message, :class_name => "Mailboxer::Message", :foreign_key => "notification_id"
+  belongs_to :conversation, :class_name => "Mailboxer::Conversation"
 
   validates_presence_of :receiver
 
-  scope :recipient, lambda { |recipient|
-    where(:receiver_id => recipient.id,:receiver_type => recipient.class.base_class.to_s)
+  scope :recipient, ->(recipient){
+    where(:receiver_id => recipient.id,:receiver_type => recipient.class.to_s)
   }
-  #Notifications Scope checks type to be nil, not Notification because of STI behaviour
-  #with the primary class (no type is saved)
-  scope :notifications_receipts, lambda { joins(:notification).where('mailboxer_notifications.type' => nil) }
-  scope :messages_receipts, lambda { joins(:notification).where('mailboxer_notifications.type' => Mailboxer::Message.to_s) }
+  scope :messages_receipts, where('mailboxer_notifications.type' => Mailboxer::Message.to_s)
   scope :notification, lambda { |notification|
     where(:notification_id => notification.id)
   }
   scope :conversation, lambda { |conversation|
-    joins(:message).where('mailboxer_notifications.conversation_id' => conversation.id)
+    where(:conversation_id => conversation.id)
   }
   scope :sentbox, lambda { where(:mailbox_type => "sentbox") }
   scope :inbox, lambda { where(:mailbox_type => "inbox") }
@@ -75,13 +83,11 @@ class Mailboxer::Receipt < ActiveRecord::Base
     def update_receipts(updates, options={})
       ids = where(options).map { |rcp| rcp.id }
       unless ids.empty?
-        sql = ids.map { "#{table_name}.id = ? " }.join(' OR ')
-        conditions = [sql].concat(ids)
-        Mailboxer::Receipt.where(conditions).update_all(updates)
+        Mailboxer::Receipt.in(id: ids).update_all(updates)
       end
     end
-  end
 
+  end
 
   #Marks the receipt as deleted
   def mark_as_deleted

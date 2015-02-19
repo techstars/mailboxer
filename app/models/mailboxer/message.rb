@@ -1,17 +1,16 @@
 class Mailboxer::Message < Mailboxer::Notification
   attr_accessible :attachment if Mailboxer.protected_attributes?
-  self.table_name = :mailboxer_notifications
+
+  store_in collection: :mailboxer_messages
+
+  field :subject, type: String,  :default => ""
+  field :body,    type: String,  :default => ""
 
   belongs_to :conversation, :class_name => "Mailboxer::Conversation", :validate => true, :autosave => true
   validates_presence_of :sender
 
   class_attribute :on_deliver_callback
   protected :on_deliver_callback
-  scope :conversation, lambda { |conversation|
-    where(:conversation_id => conversation.id)
-  }
-
-  mount_uploader :attachment, AttachmentUploader
 
   class << self
     #Sets the on deliver callback method.

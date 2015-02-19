@@ -18,3 +18,16 @@ rdoc/
 doc/
 .yardoc/*
 .rvmrc
+
+# Misc files
+.env
+*.env
+*.bak
+*.diff
+*databasedotcom.yml*
+/solr/data
+*~
+\#*\#
+
+# Ignore coverage files.
+*coverage*

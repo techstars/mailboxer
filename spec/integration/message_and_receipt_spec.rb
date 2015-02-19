@@ -18,14 +18,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message1.sender.id).to eq @entity1.id
         expect(@message1.sender.class).to eq @entity1.class
-        assert @message1.body.eql?"Body"
-        assert @message1.subject.eql?"Subject"
+        expect(@message1.body).to eq("Body")
+        expect(@message1.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message1).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -33,7 +33,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message1).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be false
           expect(mail.trashed).to be false
@@ -68,7 +68,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -76,7 +76,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be false
           expect(mail.trashed).to be false
@@ -107,14 +107,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message2.sender.id).to eq @entity2.id
         expect(@message2.sender.class).to eq @entity2.class
-        assert @message2.body.eql?"Reply body"
-        assert @message2.subject.eql?"Subject"
+        expect(@message2.body).to eq("Reply body")
+        expect(@message2.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -122,7 +122,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be false
           expect(mail.trashed).to be false
@@ -152,14 +152,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message2.sender.id).to eq @entity2.id
         expect(@message2.sender.class).to eq @entity2.class
-        assert @message2.body.eql?"Reply body"
-        assert @message2.subject.eql?"Subject"
+        expect(@message2.body).to eq("Reply body")
+        expect(@message2.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -167,7 +167,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be false
           expect(mail.trashed).to be false
@@ -204,14 +204,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message1.sender.id).to eq @entity1.id
         expect(@message1.sender.class).to eq @entity1.class
-        assert @message1.body.eql?"Body"
-        assert @message1.subject.eql?"Subject"
+        expect(@message1.body).to eq("Body")
+        expect(@message1.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message1).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -219,7 +219,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message1).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be false
           expect(mail.trashed).to be false
@@ -247,14 +247,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message2.sender.id).to eq @entity2.id
         expect(@message2.sender.class).to eq @entity2.class
-        assert @message2.body.eql?"Reply body"
-        assert @message2.subject.eql?"Subject"
+        expect(@message2.body).to eq("Reply body")
+        expect(@message2.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -262,7 +262,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be false
           expect(mail.trashed).to be false
@@ -293,14 +293,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message2.sender.id).to eq @entity2.id
         expect(@message2.sender.class).to eq @entity2.class
-        assert @message2.body.eql?"Reply body"
-        assert @message2.subject.eql?"Subject"
+        expect(@message2.body).to eq("Reply body")
+        expect(@message2.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -308,7 +308,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be false
           expect(mail.trashed).to be false
@@ -370,14 +370,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message1.sender.id).to eq @entity1.id
         expect(@message1.sender.class).to eq @entity1.class
-        assert @message1.body.eql?"Body"
-        assert @message1.subject.eql?"Subject"
+        expect(@message1.body).to eq("Body")
+        expect(@message1.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message1).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -386,7 +386,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         #Receiver Mails
         @recipients.each do |receiver|
           mail = Mailboxer::Receipt.recipient(receiver).notification(@message1).first
-          assert mail
+          expect(mail).to_not be_nil
           if mail
             expect(mail.is_read).to be false
             expect(mail.trashed).to be false
@@ -416,14 +416,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message2.sender.id).to eq @entity2.id
         expect(@message2.sender.class).to eq @entity2.class
-        assert @message2.body.eql?"Reply body"
-        assert @message2.subject.eql?"Subject"
+        expect(@message2.body).to eq("Reply body")
+        expect(@message2.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -431,7 +431,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be false
           expect(mail.trashed).to be false
@@ -440,7 +440,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
 
         #No Receiver, No Mail
         mail = Mailboxer::Receipt.recipient(@entity3).notification(@message2).first
-        assert mail.nil?
+        expect(mail).to be_nil
 
       end
 
@@ -472,14 +472,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message2.sender.id).to eq @entity2.id
         expect(@message2.sender.class).to eq @entity2.class
-        assert @message2.body.eql?"Reply body"
-        assert @message2.subject.eql?"Subject"
+        expect(@message2.body).to eq("Reply body")
+        expect(@message2.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -488,7 +488,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         #Receiver Mails
         @recipients2.each do |receiver|
           mail = Mailboxer::Receipt.recipient(receiver).notification(@message2).first
-          assert mail
+          expect(mail).to_not be_nil
           if mail
             expect(mail.is_read).to be false
             expect(mail.trashed).to be false
@@ -552,14 +552,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message1.sender.id).to eq @entity1.id
         expect(@message1.sender.class).to eq @entity1.class
-        assert @message1.body.eql?"Body"
-        assert @message1.subject.eql?"Subject"
+        expect(@message1.body).to eq("Body")
+        expect(@message1.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message1).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -568,7 +568,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         #Receiver Mails
         @recipients.each do |receiver|
           mail = Mailboxer::Receipt.recipient(receiver).notification(@message1).first
-          assert mail
+          expect(mail).to_not be_nil
           if mail
             expect(mail.is_read).to be false
             expect(mail.trashed).to be false
@@ -598,14 +598,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message2.sender.id).to eq @entity2.id
         expect(@message2.sender.class).to eq @entity2.class
-        assert @message2.body.eql?"Reply body"
-        assert @message2.subject.eql?"Subject"
+        expect(@message2.body).to eq("Reply body")
+        expect(@message2.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -613,7 +613,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be false
           expect(mail.trashed).to be false
@@ -622,7 +622,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
 
         #No Receiver, No Mail
         mail = Mailboxer::Receipt.recipient(@entity3).notification(@message2).first
-        assert mail.nil?
+        expect(mail).to be_nil
 
       end
 
@@ -654,14 +654,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message2.sender.id).to eq @entity2.id
         expect(@message2.sender.class).to eq @entity2.class
-        assert @message2.body.eql?"Reply body"
-        assert @message2.subject.eql?"Subject"
+        expect(@message2.body).to eq("Reply body")
+        expect(@message2.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -670,7 +670,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         #Receiver Mails
         @recipients2.each do |receiver|
           mail = Mailboxer::Receipt.recipient(receiver).notification(@message2).first
-          assert mail
+          expect(mail).to_not be_nil
           if mail
             expect(mail.is_read).to be false
             expect(mail.trashed).to be false
@@ -731,14 +731,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message1.sender.id).to eq @entity1.id
         expect(@message1.sender.class).to eq @entity1.class
-        assert @message1.body.eql?"Body"
-        assert @message1.subject.eql?"Subject"
+        expect(@message1.body).to eq("Body")
+        expect(@message1.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message1).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -746,7 +746,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message1).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be false
           expect(mail.trashed).to be false
@@ -774,14 +774,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message2.sender.id).to eq @entity2.id
         expect(@message2.sender.class).to eq @entity2.class
-        assert @message2.body.eql?"Reply body"
-        assert @message2.subject.eql?"Subject"
+        expect(@message2.body).to eq("Reply body")
+        expect(@message2.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -789,7 +789,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be false
           expect(mail.trashed).to be false
@@ -820,14 +820,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message2.sender.id).to eq @entity2.id
         expect(@message2.sender.class).to eq @entity2.class
-        assert @message2.body.eql?"Reply body"
-        assert @message2.subject.eql?"Subject"
+        expect(@message2.body).to eq("Reply body")
+        expect(@message2.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -835,7 +835,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be false
           expect(mail.trashed).to be false
@@ -865,14 +865,14 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
       it "should create proper message" do
         expect(@message2.sender.id).to eq @entity2.id
         expect(@message2.sender.class).to eq @entity2.class
-        assert @message2.body.eql?"Reply body"
-        assert @message2.subject.eql?"Subject"
+        expect(@message2.body).to eq("Reply body")
+        expect(@message2.subject).to eq("Subject")
       end
 
       it "should create proper mails" do
         #Sender Mail
         mail = Mailboxer::Receipt.recipient(@entity2).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be true
           expect(mail.trashed).to be false
@@ -880,7 +880,7 @@ describe "Messages And Mailboxer::Receipts", type: :integration do
         end
         #Receiver Mail
         mail = Mailboxer::Receipt.recipient(@entity1).notification(@message2).first
-        assert mail
+        expect(mail).to_not be_nil
         if mail
           expect(mail.is_read).to be false
           expect(mail.trashed).to be false

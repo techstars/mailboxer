@@ -22,10 +22,10 @@ describe Mailboxer::Mailbox do
     assert @entity1.mailbox.conversations
 
     expect(@entity1.mailbox.conversations.to_a.count).to eq 4
-        expect(@entity1.mailbox.conversations.to_a.count(@conversation)).to eq 1
-        expect(@entity1.mailbox.conversations.to_a.count(@conv2)).to eq 1
-        expect(@entity1.mailbox.conversations.to_a.count(@conv3)).to eq 1
-        expect(@entity1.mailbox.conversations.to_a.count(@conv4)).to eq 1
+    expect(@entity1.mailbox.conversations.to_a.count(@conversation)).to eq 1
+    expect(@entity1.mailbox.conversations.to_a.count(@conv2)).to eq 1
+    expect(@entity1.mailbox.conversations.to_a.count(@conv3)).to eq 1
+    expect(@entity1.mailbox.conversations.to_a.count(@conv4)).to eq 1
   end
 
   it "should return all mail" do

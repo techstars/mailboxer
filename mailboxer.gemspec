@@ -20,12 +20,13 @@ Gem::Specification.new do |s|
 
   # Gem dependencies
   #
-  # SQL foreign keys
-  s.add_runtime_dependency('foreigner', '>= 0.9.1')
 
   # Development Gem dependencies
-  s.add_runtime_dependency('rails', '>= 3.2.0')
+  s.add_runtime_dependency('rails', '>= 3.2.21')
   s.add_runtime_dependency('carrierwave', '>= 0.5.8')
+
+  s.add_dependency "bson_ext", "~> 1.10.2"
+  s.add_dependency "mongoid", "~> 3.0.0"
 
   if RUBY_ENGINE == "rbx" && RUBY_VERSION >= "2.1.0"
     # Rubinius has it's own dependencies
@@ -38,6 +39,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-collection_matchers', '~> 1.1'
   s.add_development_dependency('appraisal', '~> 1.0.0')
   s.add_development_dependency('shoulda-matchers')
+  s.add_development_dependency 'mongoid-rspec'
   # Fixtures
   #if RUBY_VERSION >= '1.9.2'
    # s.add_development_dependency('factory_girl', '>= 3.0.0')
@@ -50,10 +52,10 @@ Gem::Specification.new do |s|
   # Integration testing
   s.add_development_dependency('capybara', '>= 0.3.9')
   # Testing database
-  if RUBY_PLATFORM == 'java'
-    s.add_development_dependency('jdbc-sqlite3')
-    s.add_development_dependency('activerecord-jdbcsqlite3-adapter', '1.3.0.rc1')
-  else
-    s.add_development_dependency('sqlite3')
-  end
+  # if RUBY_PLATFORM == 'java'
+  #   s.add_development_dependency('jdbc-sqlite3')
+  #   s.add_development_dependency('activerecord-jdbcsqlite3-adapter', '1.3.0.rc1')
+  # else
+  #   s.add_development_dependency('sqlite3')
+  # end
 end

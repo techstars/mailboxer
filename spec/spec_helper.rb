@@ -3,7 +3,6 @@ ENV["RAILS_ENV"] = "test"
 
 require File.expand_path("../dummy/config/environment.rb",  __FILE__)
 require "rspec/rails"
-
 require 'rspec/its'
 require 'rspec/collection_matchers'
 
@@ -17,9 +16,6 @@ Rails.backtrace_cleaner.remove_silencers!
 require "capybara/rails"
 Capybara.default_driver   = :rack_test
 Capybara.default_selector = :css
-
-# Run any available migration
-ActiveRecord::Migrator.migrate File.expand_path("../dummy/db/migrate/", __FILE__)
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
@@ -36,6 +32,7 @@ RSpec.configure do |config|
   # methods or matchers
   require 'rspec/expectations'
   config.include RSpec::Matchers
+  config.include Mongoid::Matchers, type: :model
 
   # == Mock Framework
   config.mock_with :rspec

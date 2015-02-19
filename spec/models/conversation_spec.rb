@@ -47,7 +47,7 @@ describe Mailboxer::Conversation do
   it "should be removed from the database once deleted by all participants" do
     conversation.mark_as_deleted(entity1)
     conversation.mark_as_deleted(entity2)
-    expect(Mailboxer::Conversation.exists?(conversation.id)).to be false
+    expect(Mailboxer::Conversation.find(conversation.id)).to be_nil
   end
 
   it "should be able to be marked as read" do
