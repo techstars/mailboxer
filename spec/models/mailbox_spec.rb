@@ -108,7 +108,7 @@ describe Mailboxer::Mailbox do
     expect(@entity1.mailbox.receipts.inbox[0]).to eq Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[0]
     expect(@entity1.mailbox.receipts.inbox[1]).to eq Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[1]
 
-    assert @entity1.mailbox.receipts.inbox.mark_as_deleted
+    @entity1.mailbox.receipts.inbox.mark_as_deleted
     expect(@entity1.mailbox.inbox.count).to eq 0
   end
 
@@ -118,7 +118,7 @@ describe Mailboxer::Mailbox do
     expect(@entity1.mailbox.receipts.sentbox[0]).to eq @receipt1
     expect(@entity1.mailbox.receipts.sentbox[1]).to eq @receipt3
 
-    assert @entity1.mailbox.receipts.sentbox.mark_as_deleted
+    @entity1.mailbox.receipts.sentbox.mark_as_deleted
     expect(@entity1.mailbox.sentbox.count).to eq 0
   end
 
@@ -128,7 +128,7 @@ describe Mailboxer::Mailbox do
     expect(@entity1.mailbox.receipts.inbox[0]).to eq Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[0]
     expect(@entity1.mailbox.receipts.inbox[1]).to eq Mailboxer::Receipt.recipient(@entity1).inbox.conversation(@conversation)[1]
 
-    assert @entity1.mailbox.receipts.inbox.mark_as_deleted
+    @entity1.mailbox.receipts.inbox.mark_as_deleted
     expect(@entity1.mailbox.inbox.count).to eq 0
 
     @entity2.reply_to_all(@receipt1,"Reply body 1")

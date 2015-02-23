@@ -142,7 +142,7 @@ class Mailboxer::Conversation
         :receiver     => participant,
         :updated_at   => message.updated_at,
         :created_at   => message.created_at
-      }).build.save
+      }).build.save!
     end
   end
 

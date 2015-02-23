@@ -17,6 +17,10 @@ class Mailboxer::Message < Mailboxer::Notification
     def on_deliver(callback_method)
       self.on_deliver_callback = callback_method
     end
+
+    def conversation(conversation)
+      where(conversation_id: conversation.id)
+    end
   end
 
   #Delivers a Message. USE NOT RECOMENDED.
@@ -44,4 +48,17 @@ class Mailboxer::Message < Mailboxer::Notification
     end
     sender_receipt
   end
+
+  private
+
+  def build_receipt(receiver, mailbox_type, is_read = false)
+    Mailboxer::ReceiptBuilder.new({
+      :notification => self,
+      :conversation => self.conversation,
+      :mailbox_type => mailbox_type,
+      :receiver     => receiver,
+      :is_read      => is_read,
+    }).build
+  end
+
 end

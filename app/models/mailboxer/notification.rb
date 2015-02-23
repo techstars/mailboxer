@@ -10,6 +10,7 @@ class Mailboxer::Notification
   field :subject, type: String,   :default => ""
   field :draft,   type: Boolean,  :default => false
   field :global,  type: Boolean,  :default => false
+  field :expires, type: DateTime
 
   attr_accessor :recipients
   attr_accessible :body, :subject, :global, :expires if Mailboxer.protected_attributes?
@@ -26,18 +27,16 @@ class Mailboxer::Notification
   scope :with_object, ->(obj){
     where('notified_object_id' => obj.id,'notified_object_type' => obj.class.to_s)
   }
-  # scope :not_trashed, where('mailboxer_receipts.trashed' => false)
-  # scope :unread, where('mailboxer_receipts.is_read' => false)
   scope :global, where(:global => true)
   scope :expired, lambda { lt(expires: Time.now) }
   scope :unexpired, lambda {
-    where(:expires => nil).or(:expires > Time.now)
+    self.or( where(:expires => nil).selector, gt(expires: Time.now).selector )
   }
 
   class << self
 
     def recipient(recipient)
-      n_ids = Mailboxer::Receipt.where(:receiver_id => recipient.id,:receiver_type => recipient.class.to_s).map{|r| r.notification.id }.uniq
+      n_ids = Mailboxer::Receipt.where(:receiver_id => recipient.id,:receiver_type => recipient.class.to_s,:type => nil).desc(:created_at).map{|r| r.notification.id }.uniq
       self.in(id: n_ids)
     end
 
@@ -47,7 +46,7 @@ class Mailboxer::Notification
     end
 
     def unread
-      n_ids = Mailboxer::Receipt(:is_read => false).map{|r| r.notification.id }.uniq
+      n_ids = Mailboxer::Receipt.where(:is_read => false).map{|r| r.notification.id }.uniq
       self.in(id: n_ids)
     end
 
@@ -83,7 +82,7 @@ class Mailboxer::Notification
   end
 
   def expired?
-    expires.present? && (expires < Time.now)
+    expires.present? && (expires.to_time < Time.now)
   end
 
   def expire!
@@ -204,7 +203,6 @@ class Mailboxer::Notification
   def build_receipt(receiver, mailbox_type, is_read = false)
     Mailboxer::ReceiptBuilder.new({
       :notification => self,
-      :conversation => self.conversation,
       :mailbox_type => mailbox_type,
       :receiver     => receiver,
       :is_read      => is_read,
