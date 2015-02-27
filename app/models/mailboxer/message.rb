@@ -61,4 +61,8 @@ class Mailboxer::Message < Mailboxer::Notification
     }).build
   end
 
+  if Mailboxer.search_enabled
+    searchkick
+  end
+
 end

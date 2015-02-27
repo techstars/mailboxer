@@ -215,12 +215,12 @@ module Mailboxer
     end
 
     def search_messages(query)
-      @search = Mailboxer::Receipt.search do
-        fulltext query
-        with :receiver_id, self.id
+      messages = Mailboxer::Message.search query, limit: 10
+      unless messages.nil? or messages.empty?
+        messages = messages.select{|msg| msg.receipts.select {|rcp| rcp.receiver_id == self.id }.present? }
       end
-
-      @search.results.map { |r| r.conversation }.uniq
+      return messages
     end
+
   end
 end

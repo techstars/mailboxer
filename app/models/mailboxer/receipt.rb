@@ -156,15 +156,4 @@ class Mailboxer::Receipt
     end
   end
 
-  if Mailboxer.search_enabled
-    searchable do
-      text :subject, :boost => 5 do
-        message.subject if message
-      end
-      text :body do
-        message.body if message
-      end
-      integer :receiver_id
-    end
-  end
 end
