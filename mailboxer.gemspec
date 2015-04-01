@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency('carrierwave', '>= 0.5.8')
 
   s.add_dependency "bson_ext", "~> 1.10.2"
-  s.add_dependency "mongoid", "~> 3.0.0"
+  s.add_dependency "mongoid", "~> 3.1"
 
   if RUBY_ENGINE == "rbx" && RUBY_VERSION >= "2.1.0"
     # Rubinius has it's own dependencies
