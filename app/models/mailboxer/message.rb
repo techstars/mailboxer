@@ -6,7 +6,7 @@ class Mailboxer::Message < Mailboxer::Notification
   field :subject, type: String,  :default => ""
   field :body,    type: String,  :default => ""
 
-  belongs_to :conversation, :class_name => "Mailboxer::Conversation", :validate => true, :autosave => true
+  belongs_to :conversation, :class_name => "Mailboxer::Conversation", :validate => true, :autosave => true, index: true
   validates_presence_of :sender
 
   class_attribute :on_deliver_callback

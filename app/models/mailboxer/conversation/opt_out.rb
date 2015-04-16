@@ -7,7 +7,7 @@ module Mailboxer
 
       store_in collection: :mailboxer_conversation_opt_outs
 
-      belongs_to :conversation, :class_name  => "Mailboxer::Conversation"
+      belongs_to :conversation, :class_name  => "Mailboxer::Conversation", index: true
       belongs_to :unsubscriber, :polymorphic => true
 
       validates :unsubscriber, :presence => true

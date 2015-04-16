@@ -12,10 +12,10 @@ class Mailboxer::Receipt
 
   attr_accessible :trashed, :is_read, :deleted if Mailboxer.protected_attributes?
 
-  belongs_to :notification, :class_name => "Mailboxer::Notification", :validate => true, :autosave => true
-  belongs_to :receiver, :polymorphic => :true
-  belongs_to :message, :class_name => "Mailboxer::Message", :foreign_key => "notification_id"
-  belongs_to :conversation, :class_name => "Mailboxer::Conversation"
+  belongs_to :notification, :class_name => "Mailboxer::Notification", :validate => true, :autosave => true, index: true
+  belongs_to :receiver, :polymorphic => :true, index: true
+  belongs_to :message, :class_name => "Mailboxer::Message", :foreign_key => "notification_id", index: true
+  belongs_to :conversation, :class_name => "Mailboxer::Conversation", index: true
 
   validates_presence_of :receiver
 
