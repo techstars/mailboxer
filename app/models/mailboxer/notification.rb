@@ -19,6 +19,9 @@ class Mailboxer::Notification
   belongs_to :notified_object, :polymorphic => :true
   has_many   :receipts, :dependent => :destroy, :class_name => "Mailboxer::Receipt"
 
+  index({ created_at: 1 },{ background: true })
+  index({ updated_at: 1 },{ background: true })
+
   validates :subject, :presence => true,
                       :length => { :maximum => Mailboxer.subject_max_length }
   validates :body,    :presence => true,

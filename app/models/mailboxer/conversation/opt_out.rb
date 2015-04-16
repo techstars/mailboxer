@@ -12,6 +12,9 @@ module Mailboxer
 
       validates :unsubscriber, :presence => true
 
+      index({ created_at: 1 },{ background: true })
+      index({ updated_at: 1 },{ background: true })
+
       scope :unsubscriber, lambda { |entity| where(:unsubscriber_type => entity.class.name, :unsubscriber_id => entity.id) }
 
     end

@@ -19,6 +19,9 @@ class Mailboxer::Receipt
 
   validates_presence_of :receiver
 
+  index({ created_at: 1 },{ background: true })
+  index({ updated_at: 1 },{ background: true })
+
   scope :recipient, ->(recipient){
     where(:receiver_id => recipient.id,:receiver_type => recipient.class.to_s)
   }

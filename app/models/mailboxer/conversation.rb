@@ -16,6 +16,9 @@ class Mailboxer::Conversation
   validates :subject, :presence => true,
                       :length => { :maximum => Mailboxer.subject_max_length }
 
+  index({ created_at: 1 },{ background: true })
+  index({ updated_at: 1 },{ background: true })
+
   before_validation :clean
 
   class << self
