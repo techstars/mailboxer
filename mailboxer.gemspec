@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   # Development Gem dependencies
   s.add_runtime_dependency('rails', '>= 4.0.0')
   s.add_runtime_dependency('carrierwave', '>= 0.5.8')
-
+  s.add_dependency 'protected_attributes'
   s.add_dependency "bson", ">= 2.2"
   s.add_dependency "mongoid", "~> 4.0.2"
 
