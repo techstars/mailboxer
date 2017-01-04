@@ -7,10 +7,9 @@ class Mailboxer::Receipt
 
   field :is_read,      type: Boolean,  :default => false
   field :trashed,      type: Boolean,  :default => false
-  field :deleted,      type: Boolean,  :default => false
   field :mailbox_type, type: String,   :default => ""
 
-  attr_accessible :trashed, :is_read, :deleted if Mailboxer.protected_attributes?
+  attr_accessible :trashed, :is_read if Mailboxer.protected_attributes?
 
   belongs_to :notification, :class_name => "Mailboxer::Notification", :validate => true, :autosave => true, index: true
   belongs_to :receiver, :polymorphic => :true, index: true
@@ -25,7 +24,7 @@ class Mailboxer::Receipt
   scope :recipient, ->(recipient){
     where(:receiver_id => recipient.id,:receiver_type => recipient.class.to_s)
   }
-  scope :messages_receipts, where('mailboxer_notifications.type' => Mailboxer::Message.to_s)
+  scope :messages_receipts, lambda { where('mailboxer_notifications.type' => Mailboxer::Message.to_s) }
   scope :notification, lambda { |notification|
     where(:notification_id => notification.id)
   }

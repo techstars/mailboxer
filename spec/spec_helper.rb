@@ -26,13 +26,14 @@ Dir["#{File.dirname(__FILE__)}/factories/*.rb"].each {|f| require f}
 
 # Shoulda Matchers
 require 'shoulda/matchers'
+require 'mongoid-rspec'
 
 RSpec.configure do |config|
   # Remove this line if you don't want RSpec's should and should_not
   # methods or matchers
   require 'rspec/expectations'
   config.include RSpec::Matchers
-  config.include Mongoid::Matchers, type: :model
+  config.include Mongoid::Matchers
 
   # == Mock Framework
   config.mock_with :rspec

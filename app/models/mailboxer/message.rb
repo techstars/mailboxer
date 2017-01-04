@@ -1,8 +1,6 @@
 class Mailboxer::Message < Mailboxer::Notification
   attr_accessible :attachment if Mailboxer.protected_attributes?
 
-  store_in collection: :mailboxer_messages
-
   field :subject, type: String,  :default => ""
   field :body,    type: String,  :default => ""
 

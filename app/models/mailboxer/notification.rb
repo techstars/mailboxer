@@ -30,7 +30,7 @@ class Mailboxer::Notification
   scope :with_object, ->(obj){
     where('notified_object_id' => obj.id,'notified_object_type' => obj.class.to_s)
   }
-  scope :global, where(:global => true)
+  scope :global, lambda { where(:global => true) }
   scope :expired, lambda { lt(expires: Time.now) }
   scope :unexpired, lambda {
     self.or( where(:expires => nil).selector, gt(expires: Time.now).selector )
