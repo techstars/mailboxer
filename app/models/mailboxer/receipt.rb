@@ -9,8 +9,6 @@ class Mailboxer::Receipt
   field :trashed,      type: Boolean,  :default => false
   field :mailbox_type, type: String,   :default => ""
 
-  attr_accessible :trashed, :is_read if Mailboxer.protected_attributes?
-
   belongs_to :notification, :class_name => "Mailboxer::Notification", :validate => true, :autosave => true, index: true
   belongs_to :receiver, :polymorphic => :true, index: true
   belongs_to :message, :class_name => "Mailboxer::Message", :foreign_key => "notification_id", index: true

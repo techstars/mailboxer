@@ -1,5 +1,4 @@
 class Mailboxer::Message < Mailboxer::Notification
-  attr_accessible :attachment if Mailboxer.protected_attributes?
 
   field :subject, type: String,  :default => ""
   field :body,    type: String,  :default => ""

@@ -7,8 +7,6 @@ class Mailboxer::Conversation
 
   field :subject, type: String,  :default => ""
 
-  attr_accessible :subject if Mailboxer.protected_attributes?
-
   has_many :opt_outs, :dependent => :destroy, :class_name => "Mailboxer::Conversation::OptOut"
   has_many :messages, :dependent => :destroy, :class_name => "Mailboxer::Message"
   has_many :receipts, :class_name => "Mailboxer::Receipt"
