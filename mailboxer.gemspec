@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
 
   # Development Gem dependencies
   s.add_runtime_dependency('rails', '>= 5.0.0')
-  s.add_runtime_dependency('carrierwave', '>= 2.1.0')
+  s.add_runtime_dependency('carrierwave', '>= 1.3.1')
   s.add_dependency "bson", ">= 4.8.2"
   s.add_dependency "mongoid", "~> 7.1.0"
 
